@@ -79,9 +79,11 @@ const AdminLogin: React.FC = () => {
       <div className="relative w-full max-w-md">
         {/* Logo e Título */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg">
-            <Shield className="h-8 w-8 text-white" />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            className="h-20 mx-auto mb-4" 
+          />
           <h1 className="text-3xl font-bold text-white mb-2">Painel Administrativo</h1>
           <p className="text-slate-400">Acesso restrito para administradores</p>
         </div>

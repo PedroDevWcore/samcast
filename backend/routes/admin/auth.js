@@ -11,6 +11,8 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   try {
     const { email, senha } = req.body;
+    
+    console.log('🔐 Tentativa de login admin:', { email, senhaLength: senha?.length });
 
     if (!email || !senha) {
       return res.status(400).json({
@@ -20,12 +22,16 @@ router.post('/login', async (req, res) => {
     }
 
     // Buscar administrador
+    console.log('🔍 Buscando admin no banco...');
     const admins = await query(
       'SELECT * FROM administradores WHERE email = ? AND ativo = 1',
       [email]
     );
+    
+    console.log('👤 Admins encontrados:', admins.length);
 
     if (admins.length === 0) {
+      console.log('❌ Admin não encontrado ou inativo');
       return res.status(401).json({
         success: false,
         error: 'Credenciais inválidas'
@@ -33,10 +39,29 @@ router.post('/login', async (req, res) => {
     }
 
     const admin = admins[0];
+    console.log('👤 Admin encontrado:', { 
+      id: admin.codigo, 
+      email: admin.email, 
+      ativo: admin.ativo,
+      senhaLength: admin.senha?.length 
+    });
+
+    // Verificar se a senha existe
+    if (!admin.senha) {
+      console.log('❌ Senha não configurada para o admin');
+      return res.status(500).json({
+        success: false,
+        error: 'Senha não configurada para este administrador'
+      });
+    }
 
     // Verificar senha
-    const senhaValida = admin.senha ? await bcrypt.compare(senha, admin.senha) : false;
-    if (!senhaValida || !admin.senha) {
+    console.log('🔑 Verificando senha...');
+    const senhaValida = await bcrypt.compare(senha, admin.senha);
+    console.log('🔑 Senha válida:', senhaValida);
+    
+    if (!senhaValida) {
+      console.log('❌ Senha inválida');
       return res.status(401).json({
         success: false,
         error: 'Credenciais inválidas'
@@ -68,6 +93,7 @@ router.post('/login', async (req, res) => {
     // Log da ação
     await logAdminAction(admin.codigo, 'login', null, null, null, { ip: req.ip }, req);
 
+    console.log('✅ Login admin realizado com sucesso');
     res.json({
       success: true,
       token: sessionToken,
@@ -81,6 +107,7 @@ router.post('/login', async (req, res) => {
 
   } catch (error) {
     console.error('Admin login error:', error);
+    console.error('Stack trace:', error.stack);
     res.status(500).json({
       success: false,
       error: 'Erro interno do servidor'
