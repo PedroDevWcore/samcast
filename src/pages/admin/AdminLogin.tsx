@@ -203,11 +203,12 @@ const AdminLogin: React.FC = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-        <img 
-          src="/logo.png" 
-          alt="Logo" 
-          className="h-20 mx-auto mb-4" 
-        />
+          >
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              className="h-20 mx-auto mb-4" 
+            />
           </button>
         </div>
       </div>
