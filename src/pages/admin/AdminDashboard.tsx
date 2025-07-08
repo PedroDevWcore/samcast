@@ -174,7 +174,11 @@ const AdminDashboard: React.FC = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <Shield className="h-8 w-8 text-primary-600" />
+                <img 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  className="h-8 w-auto" 
+                />
                 <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
               </div>
             </div>

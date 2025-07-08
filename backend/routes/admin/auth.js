@@ -35,8 +35,8 @@ router.post('/login', async (req, res) => {
     const admin = admins[0];
 
     // Verificar senha
-    const senhaValida = await bcrypt.compare(senha, admin.senha);
-    if (!senhaValida) {
+    const senhaValida = admin.senha ? await bcrypt.compare(senha, admin.senha) : false;
+    if (!senhaValida || !admin.senha) {
       return res.status(401).json({
         success: false,
         error: 'Credenciais inválidas'
@@ -161,8 +161,16 @@ router.post('/change-password', adminAuth, async (req, res) => {
       });
     }
 
+    const admin = admins[0];
+    if (!admin.senha) {
+      return res.status(400).json({
+        success: false,
+        error: 'Senha não configurada para este administrador'
+      });
+    }
+
     // Verificar senha atual
-    const senhaValida = await bcrypt.compare(senhaAtual, admins[0].senha);
+    const senhaValida = await bcrypt.compare(senhaAtual, admin.senha);
     if (!senhaValida) {
       return res.status(401).json({
         success: false,

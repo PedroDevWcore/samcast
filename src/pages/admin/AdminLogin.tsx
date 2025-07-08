@@ -203,9 +203,11 @@ const AdminLogin: React.FC = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-            className="text-slate-400 hover:text-white transition-colors text-sm"
-          >
-            ← Voltar para o site principal
+        <img 
+          src="/logo.png" 
+          alt="Logo" 
+          className="h-20 mx-auto mb-4" 
+        />
           </button>
         </div>
       </div>
